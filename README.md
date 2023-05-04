@@ -1,2 +1,2 @@
-# Debian MulriApps Installer
+# Debian MultiApps Installer
  
