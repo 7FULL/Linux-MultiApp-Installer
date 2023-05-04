@@ -120,16 +120,29 @@ function instalarTomcat() {
     sudo apt-get install tomcat9 -y
 }
 
-function instalarTodo(){
-
-}
-
-function instalarPackDesarrolloWeb(){
-
+function instalarPHP() {
+    sudo apt install php -y
+    sudo service apache2 restart
 }
 
 function instalarOPM(){
     
+}
+
+function instalarTodo(){
+    instalarApache
+    instalarPHP
+    instalarMariaDB
+    instalarTomcat
+    instalarOPM
+    instalarPIHole
+}
+
+function instalarPackDesarrolloWeb(){
+    instalarApache
+    instalarPHP
+    instalarMariaDB
+    instalarTomcat
 }
 
 function menuDeInstalaciones() {
@@ -161,7 +174,7 @@ function menuDeInstalaciones() {
 
         case $option in
             1) instalarApache;;
-            2) instalarPIHole;;
+            2) instalarPHP;;
             3) instalarPIHole;;
             4) instalarMariaDB;;
             5) instalarTomcat;;
@@ -230,9 +243,18 @@ function menuPrincipal() {
     done
 }
 
+menuPrincipal
+
+#Por si ayuda a alguien
+
 #  -a Si existe
 #  -d Existe directorio
 #  -f Existe fichero
+#  -r Tiene permisos de lectura
+#  -w Tiene permisos de escritura
+#  -x Tiene permisos de ejecución
+#  -z Está vacía
+#  ...
 
 #  -eq  =
 #  -ne  !=
