@@ -23,7 +23,7 @@ sudo curl -O https://raw.githubusercontent.com/7FULL/Debian-MultiApp-Installer/m
 ```
 3. Ejecuta él instalador 
 ```
-sudo sh Installer.sh
+sudo bash Installer.sh
 ```
 4. Sigue las instrucciones del instalador para instalar y configurar las aplicaciones que desees.
 
