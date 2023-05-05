@@ -12,8 +12,28 @@ function instalarApache() {
         if [ $opcion == "y" ]; then
         rm /var/www/html/index.html
         fi
-
     done
+
+    while true; do
+        echo ""
+        read -p "Quieres que apache se inicie con el sistema y/n" bootStart
+        echo ""
+
+        if [$bootStart == y]; then
+                sudo systemctl enable apache2
+            break
+        elif [$bootStart == n]; then
+            break;
+        else
+            echo "Respuesta no valida"
+        fi
+    done
+
+    #reiniciamos para que se apliquen cambios
+    sudo service apache2 restart
+
+    echo ""
+    echo "Apache instalado correctamente"
 }
 
 function instalarPIHole() {
@@ -72,6 +92,8 @@ function instalarPIHole() {
     ip=$(hostname -I | awk '{print $2}')
 
     echo ""
+    echo "PiHole instalado correctamente"
+    echo ""
     echo "Ya puedes configurar lo que quieras en la pagina web. Solo visita este enlace $ip/admin"
 }
 
@@ -112,21 +134,175 @@ function instalarMariaDB() {
         fi
     done
 
+    while true; do
+        echo ""
+        read -p "Quieres que mariadb se inicie con el sistema y/n" bootStart
+        echo ""
+
+        if [$bootStart == y]; then
+            sudo systemctl enable mariadb
+            break
+        elif [$bootStart == n]; then
+            break;
+        else
+            echo "Respuesta no valida"
+        fi
+    done
+
     #Reiniciamos para que se apliquen cambios
     sudo systemctl restart mariadb
+
+    echo "Mariadb instalado correctamente"
 }
 
 function instalarTomcat() {
-    sudo apt-get install tomcat9 -y
+    while true; do
+
+        echo ""
+        echo "1. Instalar Tomcat 9"
+        echo "2. Instalar Tomcat 10"
+        echo "3. Instalar version personalizada"
+        echo "4. Salir"
+
+        echo ""
+        read -p "Qué versión de Tomcat quieres instalar? " opcion
+        echo ""
+
+        if [[ $opcion != 4 ]] then
+            # Aunque ya deberian de venir instalados por si acaso los instalamos
+            sudo apt update
+            sudo apt install default-jdk wget
+        fi
+
+        case $opcion in
+            1)  sudo apt-get install tomcat9 -y;;
+
+            2)  wget https://downloads.apache.org/tomcat/tomcat-10/v10.0.14/bin/apache-tomcat-10.0.14.tar.gz
+                sudo tar -xzf apache-tomcat-10.0.14.tar.gz -C /opt/tomcat --strip-components=1;;
+
+            3)  echo ""
+                read -p "Escribe la version concreta ejemplo: 10.0.14? " version
+                echo ""
+
+                echo "Intentando descargar la version $version"
+                echo ""
+                sleep 5 && wget https://downloads.apache.org/tomcat/tomcat-10/v$version/bin/apache-tomcat-$version.tar.gz
+                sudo tar -xzf apache-tomcat-$version.tar.gz -C /opt/tomcat --strip-components=1;;
+
+            4)  break;;
+            *)  echo "Opción no válida";;
+        esac
+
+        while true; do
+            echo ""
+            read -p "Quieres habilitar el acceso remoto al servidor para todos los clientes en la red? y/n" accesoRemoto
+            echo ""
+
+            if [$accesoRemoto == y]; then
+                # Modificamos el archivo de configuración server.xml para habilitar el acceso remoto
+                sudo sed -i 's/<Connector port="8080"/<Connector address="0.0.0.0" port="8080"/g' /opt/tomcat/conf/server.xml;
+                break
+            elif [$accesoRemoto == n]; then
+                break;
+            else
+                echo "Respuesta no valida"
+            fi
+        done
+
+
+
+        #Futura funcionlidad, solo es una buena practica no afecta a la instalación. Solo crea un usuario especifico para darle permisos únicos de tomcat
+
+        # Creamos el usuario tomcat y le damos permisos sobre el directorio de instalación de Tomcat
+        #sudo useradd -r tomcat
+        #sudo chown -R tomcat: /opt/tomcat
+
+
+
+        #Damos permisos de ejecución a todos los archivos en bin ya que ahí están él startup y él stop y aveces es necesario ejecutarlos
+        chmod +x /opt/tomcat/bin/*.sh
+
+        while true; do
+            echo ""
+            read -p "Quieres crear un usuario de administración? y/n" usuariosAdministracion
+
+        if [$accesoRemoto == y]; then
+                echo ""
+                echo "Escribe el nombre de usuario y contraseña para el usuario de administración"
+                echo ""
+                read -p "Nombre de usuario: " usuario
+                read -p "Contraseña: " contraseña
+                # Modificamos el archivo de configuración tomcat-users.xml para agregar un usuario con permisos de administración
+                sudo sed -i '/<\/tomcat-users>/ i\
+                <role rolename="manager-gui"/>\
+                <role rolename="admin-gui"/>\
+                <user username="'$usuario'" password="'$contraseña'" roles="admin-gui,manager-gui"/>\
+                ' /opt/tomcat/conf/tomcat-users.xml
+                break
+            elif [$accesoRemoto == n]; then
+                break;
+            else
+                echo "Respuesta no valida"
+            fi
+            
+        done
+
+        while true; do
+            echo ""
+            read -p "Quieres habilitar el acceso remoto al administradorWeb desde fuera del localhost? y/n" accesoRemoto
+            echo ""
+
+            if [$accesoRemoto == y]; then
+                # Modificamos el archivo de configuración server.xml para habilitar el acceso remoto
+                sudo sed -i 's/<Valve className="org.apache.catalina.valves.RemoteAddrValve" /
+                <!-- <Valve className="org.apache.catalina.valves.RemoteAddrValve" /g' /opt/tomcat/webapps/manager/META-INF/context.xml;
+
+                sudo sed -i 's/<Valve className="org.apache.catalina.valves.RemoteAddrValve" /
+                <!-- <Valve className="org.apache.catalina.valves.RemoteAddrValve" /g' /opt/tomcat/webapps/host-manager/META-INF/context.xml;
+                break
+            elif [$accesoRemoto == n]; then
+                break;
+            else
+                echo "Respuesta no valida"
+            fi
+        done
+
+        while true; do
+            echo ""
+            read -p "Quieres que el tomcat se inicie con el sistema y/n" bootStart
+            echo ""
+
+            if [$bootStart == y]; then
+                sudo systemctl enable tomcat
+                break
+            elif [$bootStart == n]; then
+                break;
+            else
+                echo "Respuesta no valida"
+            fi
+        done
+
+        # Reiniciamos el servicio para que se apliquen los cambios
+        sudo systemctl restart tomcat
+
+        echo ""
+        echo "Tomcat $version instalado correctamente."
+        echo ""
+    done
 }
 
 function instalarPHP() {
     sudo apt install php -y
+
     sudo service apache2 restart
+
+    echo ""
+
+    echo "PHP instalado correctamente"
 }
 
 function instalarOPM(){
-    
+    #Meter el mariadb en boot
 }
 
 function instalarTodo(){
@@ -245,8 +421,6 @@ function menuPrincipal() {
 
 menuPrincipal
 
-#Por si ayuda a alguien
-
 #  -a Si existe
 #  -d Existe directorio
 #  -f Existe fichero
@@ -262,3 +436,25 @@ menuPrincipal
 #  -gt  >
 #  -le  <=
 #  -ge  >=
+
+
+#   Ordenes de sed
+
+#   a   añade a las líneas seleccionadas una o más líneas más
+#   c   reemplaza las líneas seleccionadas por un nuevo contenido
+#   d   borra las líneas seleccionadas
+#   g   copia el contenido del hold space al pattern space
+#   G   añade el contenido del hold space al pattern space
+#   h   copia el contenido del pattern space al hold space
+#   H   añade el contenido del pattern space al hold space
+#   i   inserta una o más líneas antes de las líneas seleccionadas
+#   l   muestra todos los caracteres no imprimibles
+#   n   cambia a la siguiente orden de la línea siguiente del comando
+#   p   muestra las líneas seleccionadas
+#   q   finaliza el comando SED de Linux
+#   r   lee las líneas seleccionadas de un archivo
+#   s   reemplaza una determinada cadena de caracteres por otra
+#   x   intercambia el pattern space y el hold space entre sí
+#   y   sustituye un determinado carácter por otro
+#   w   escribe líneas en el archivo de texto
+#   !   aplica el comando a las líneas que no coinciden con la entrada.
