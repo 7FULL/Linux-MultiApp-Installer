@@ -279,6 +279,10 @@ function instalarTomcat() {
                 # Modificamos el archivo con 2 sed ya que la sentencia del medio tiene caracteres raros
                 sudo sed -i 's/<Valve/<!-- <Valve/g' /opt/tomcat/webapps/manager/META-INF/context.xml
                 sudo sed -i 's/<Mana/--> <Mana/g' /opt/tomcat/webapps/manager/META-INF/context.xml
+
+                # Modificamos el archivo con 2 sed ya que la sentencia del medio tiene caracteres raros
+                sudo sed -i 's/<Valve/<!-- <Valve/g' /opt/tomcat/webapps/host-manager/META-INF/context.xml
+                sudo sed -i 's/<Mana/--> <Mana/g' /opt/tomcat/webapps/host-manager/META-INF/context.xml
                 break
             elif [ $accesoRemoto == n ]; then
                 break;
