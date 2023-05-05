@@ -1,11 +1,5 @@
 #!/bin/bash
 
-#
-#
-# @Author: Pablo Hermida Gómez
-#
-#
-
 function instalarApache() {
     echo ""
     echo "Instalando apache"
