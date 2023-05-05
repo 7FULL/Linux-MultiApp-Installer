@@ -7,7 +7,6 @@ Bienvenido al Debian MultiApp Installer, un script de Linux que te ayuda a insta
 Antes de comenzar, debes tener instalado en tu sistema:
 
 - Debian (o una distribución basada en Debian)
-- Git
 
 ## Descarga y Ejecución
 Sigue estos pasos para descargar y ejecutar el archivo Installer.sh en tu sistema:
