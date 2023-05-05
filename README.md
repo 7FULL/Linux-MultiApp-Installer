@@ -17,7 +17,7 @@ Sigue estos pasos para descargar y ejecutar el archivo Installer.sh en tu sistem
 ```
 sudo wget https://raw.githubusercontent.com/7FULL/Debian-MultiApp-Installer/main/Installer.sh
 ```
-O
+o tambien
 ```
 sudo curl -O https://raw.githubusercontent.com/7FULL/Debian-MultiApp-Installer/main/Installer.sh
 ```
