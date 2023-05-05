@@ -1,17 +1,21 @@
 #!/bin/bash
 
 function instalarApache() {
+    echo ""
+    echo "Instalando apache"
+    echo ""
+
     sudo apt-get install apache2 -y
 
     echo ""
     read -p "Quieres borrar el archivo que viene por defecto con apache? y/n" option
     echo ""
 
-    while [ $option != "y" ] && [ $option != "n" ]; do
-
-        if [ $opcion == "y" ]; then
-        rm /var/www/html/index.html
+    while [ $option != y ] && [ $option != n ]; do
+        if [ $option == y ]; then
+            rm /var/www/html/index.html
         fi
+        break
     done
 
     while true; do
@@ -19,11 +23,11 @@ function instalarApache() {
         read -p "Quieres que apache se inicie con el sistema y/n" bootStart
         echo ""
 
-        if [$bootStart == y]; then
-                sudo systemctl enable apache2
+        if [ $bootStart == y ]; then
+            sudo systemctl enable apache2
             break
-        elif [$bootStart == n]; then
-            break;
+        elif [ $bootStart == n ]; then
+            break
         else
             echo "Respuesta no valida"
         fi
@@ -49,7 +53,7 @@ function instalarPIHole() {
     while true; do
         read -p "Te ha fallado el FTL? y/n" respuesta
 
-        if [$respuesta == y]; then
+        if [ $respuesta == y ]; then
 
             echo ""
             #Realizado asi en vez de echo "nameserver 8.8.8.8" | sudo tee -a /etc/resolv.conf para que el usuario no vea nada escrito       
@@ -64,8 +68,8 @@ function instalarPIHole() {
 
             echo ""
             
-        elif [$respuesta == n]; then
-            break;
+        elif [ $respuesta == n ]; then
+            break
         else
             echo "Respuesta no valida"
         fi
@@ -75,12 +79,12 @@ function instalarPIHole() {
         read -p "Quieres cambiar la contraseña de administrador? y/n" respuesta
         echo ""
 
-        if [$respuesta == y]; then
+        if [ $respuesta == y ]; then
 
             pihole -a -p
             
-        elif [$respuesta == n]; then
-            break;
+        elif [ $respuesta == n ]; then
+            break
         else
             echo "Respuesta no valida"
         fi
@@ -88,28 +92,31 @@ function instalarPIHole() {
 
     echo ""
 
-    #Obtenemos ip para mostarle la pagina web
     ip=$(hostname -I | awk '{print $2}')
 
     echo ""
     echo "PiHole instalado correctamente"
     echo ""
-    echo "Ya puedes configurar lo que quieras en la pagina web. Solo visita este enlace $ip/admin"
+    echo "Ya puedes configurar lo que quieras en la pagina web. Solo visita este enlace http://$ip/admin"
 }
 
 function instalarMariaDB() {
+    echo ""
+    echo "Instalando mariadb"
+    echo ""
+    
     sudo apt-get install mariadb-server php-mysql -y
 
     while true; do
         read -p "Quieres ejecutar la instalacion de seguridad de sql? y/n" respuesta
 
-        if [$respuesta == y]; then
+        if [ $respuesta == y ]; then
             echo "Lo recomendable es Enter N Y(contraseña) Y N Y Y"
 
             sleep 5 && sudo mysql_secure_installation
             
-        elif [$respuesta == n]; then
-            break;
+        elif [ $respuesta == n ]; then
+            break
         else
             echo "Respuesta no valida"
         fi
@@ -118,7 +125,10 @@ function instalarMariaDB() {
     while true; do
         read -p "Quieres que la base de datos emita por la ip de la raspberry? y/n" respuesta
 
-        if [$respuesta == y]; then
+        if [ $respuesta == y ]; then
+            echo ""
+            echo "Cambiando la bind-address del servidor a la ip de la raspberry"
+
             #Obtenemos la ip y con el awk obtenemos la segunda columna ya que la primera no nos interesa
             ip=$(hostname -I | awk '{print $2}')
 
@@ -127,8 +137,10 @@ function instalarMariaDB() {
 
             #Cambiamos del archivo de configuracion la bind-address a la ip de la raspberry para que emita por ahi
             sudo sed -i "s/bind-address\s*=.*/bind-address = $ip/" /etc/mysql/mariadb.conf.d/50-server.cnf
-        elif [$respuesta == n]; then
-            break;
+
+            break
+        elif [ $respuesta == n ]; then
+            break
         else
             echo "Respuesta no valida"
         fi
@@ -139,11 +151,11 @@ function instalarMariaDB() {
         read -p "Quieres que mariadb se inicie con el sistema y/n" bootStart
         echo ""
 
-        if [$bootStart == y]; then
+        if [ $bootStart == y ]; then
             sudo systemctl enable mariadb
             break
-        elif [$bootStart == n]; then
-            break;
+        elif [ $bootStart == n ]; then
+            break
         else
             echo "Respuesta no valida"
         fi
@@ -168,25 +180,36 @@ function instalarTomcat() {
         read -p "Qué versión de Tomcat quieres instalar? " opcion
         echo ""
 
-        if [[ $opcion != 4 ]] then
+        if [ $opcion != 4 ]; then
             # Aunque ya deberian de venir instalados por si acaso los instalamos
-            sudo apt update
+            echo "Instalando los jdk de java"
+            echo ""
             sudo apt install default-jdk wget
         fi
 
         case $opcion in
-            1)  sudo apt-get install tomcat9 -y;;
+            1)  echo "Instalando tomcat9"  
+                sudo apt-get install tomcat9 -y;;
 
-            2)  wget https://downloads.apache.org/tomcat/tomcat-10/v10.0.14/bin/apache-tomcat-10.0.14.tar.gz
-                sudo tar -xzf apache-tomcat-10.0.14.tar.gz -C /opt/tomcat --strip-components=1;;
+            2)  echo "Instalando tomcat10"  
+                wget https://downloads.apache.org/tomcat/tomcat-10/v10.1.8/bin/apache-tomcat-10.1.8.tar.gz
+                sudo tar -xzf apache-tomcat-10.1.8.tar.gz -C /opt/tomcat --strip-components=1;;
 
             3)  echo ""
-                read -p "Escribe la version concreta ejemplo: 10.0.14? " version
+                read -p "Escribe la version concreta ejemplo: 10.0.14 o 9.2.13? " version
                 echo ""
 
-                echo "Intentando descargar la version $version"
+                echo "Intentando instalar la version $version"
+
+                #Cortamos y comprobamos que version es para meterla en la url y cortarla en caso de que meta cualquier version anterior a 10
+                versionPrevia=${version:0:2}
+
+                if [ ${versionPrevia:1:1} == "."]; then
+                    versionPrevia=${versionPrevia:0:1}
+                fi
+
                 echo ""
-                sleep 5 && wget https://downloads.apache.org/tomcat/tomcat-10/v$version/bin/apache-tomcat-$version.tar.gz
+                sleep 5 && wget https://downloads.apache.org/tomcat/tomcat-$versionPrevia/$version/bin/apache-tomcat-$version.tar.gz
                 sudo tar -xzf apache-tomcat-$version.tar.gz -C /opt/tomcat --strip-components=1;;
 
             4)  break;;
@@ -198,12 +221,12 @@ function instalarTomcat() {
             read -p "Quieres habilitar el acceso remoto al servidor para todos los clientes en la red? y/n" accesoRemoto
             echo ""
 
-            if [$accesoRemoto == y]; then
+            if [ $accesoRemoto == y ]; then
                 # Modificamos el archivo de configuración server.xml para habilitar el acceso remoto
                 sudo sed -i 's/<Connector port="8080"/<Connector address="0.0.0.0" port="8080"/g' /opt/tomcat/conf/server.xml;
                 break
-            elif [$accesoRemoto == n]; then
-                break;
+            elif [ $accesoRemoto == n ]; then
+                break
             else
                 echo "Respuesta no valida"
             fi
@@ -226,21 +249,21 @@ function instalarTomcat() {
             echo ""
             read -p "Quieres crear un usuario de administración? y/n" usuariosAdministracion
 
-        if [$accesoRemoto == y]; then
+        if [ $usuariosAdministracion == y ]; then
                 echo ""
                 echo "Escribe el nombre de usuario y contraseña para el usuario de administración"
                 echo ""
                 read -p "Nombre de usuario: " usuario
-                read -p "Contraseña: " contraseña
+                read -p "Contraseña: " contrasena
                 # Modificamos el archivo de configuración tomcat-users.xml para agregar un usuario con permisos de administración
                 sudo sed -i '/<\/tomcat-users>/ i\
                 <role rolename="manager-gui"/>\
                 <role rolename="admin-gui"/>\
-                <user username="'$usuario'" password="'$contraseña'" roles="admin-gui,manager-gui"/>\
+                <user username="'$usuario'" password="'$contrasena'" roles="admin-gui,manager-gui"/>\
                 ' /opt/tomcat/conf/tomcat-users.xml
                 break
-            elif [$accesoRemoto == n]; then
-                break;
+            elif [ $usuariosAdministracion == n ]; then
+                break
             else
                 echo "Respuesta no valida"
             fi
@@ -252,15 +275,12 @@ function instalarTomcat() {
             read -p "Quieres habilitar el acceso remoto al administradorWeb desde fuera del localhost? y/n" accesoRemoto
             echo ""
 
-            if [$accesoRemoto == y]; then
-                # Modificamos el archivo de configuración server.xml para habilitar el acceso remoto
-                sudo sed -i 's/<Valve className="org.apache.catalina.valves.RemoteAddrValve" /
-                <!-- <Valve className="org.apache.catalina.valves.RemoteAddrValve" /g' /opt/tomcat/webapps/manager/META-INF/context.xml;
-
-                sudo sed -i 's/<Valve className="org.apache.catalina.valves.RemoteAddrValve" /
-                <!-- <Valve className="org.apache.catalina.valves.RemoteAddrValve" /g' /opt/tomcat/webapps/host-manager/META-INF/context.xml;
+            if [ $accesoRemoto == y ]; then
+                # Modificamos el archivo con 2 sed ya que la sentencia del medio tiene caracteres raros
+                sudo sed -i 's/<Valve/<!-- <Valve/g' /opt/tomcat/webapps/manager/META-INF/context.xml
+                sudo sed -i 's/<Mana/--> <Mana/g' /opt/tomcat/webapps/manager/META-INF/context.xml
                 break
-            elif [$accesoRemoto == n]; then
+            elif [ $accesoRemoto == n ]; then
                 break;
             else
                 echo "Respuesta no valida"
@@ -272,10 +292,10 @@ function instalarTomcat() {
             read -p "Quieres que el tomcat se inicie con el sistema y/n" bootStart
             echo ""
 
-            if [$bootStart == y]; then
+            if [ $bootStart == y ]; then
                 sudo systemctl enable tomcat
                 break
-            elif [$bootStart == n]; then
+            elif [ $bootStart == n ]; then
                 break;
             else
                 echo "Respuesta no valida"
@@ -292,6 +312,10 @@ function instalarTomcat() {
 }
 
 function instalarPHP() {
+    echo ""
+    echo "Instalando php"
+    echo ""
+
     sudo apt install php -y
 
     sudo service apache2 restart
@@ -302,7 +326,18 @@ function instalarPHP() {
 }
 
 function instalarOPM(){
-    #Meter el mariadb en boot
+    echo ""
+    echo "Instalando openMediaVault"
+    echo ""
+
+    sudo wget -O - https://github.com/OpenMediaVault-Plugin-Developers/installScript/raw/master/install | sudo bash
+
+    ip=$(hostname -I | awk '{print $2}')
+
+    echo ""
+    echo "OPM instalado correctamente"
+    echo ""
+    echo "Puedes acceder al administrador web con esta url http://$ip/#/login"
 }
 
 function instalarTodo(){
@@ -430,7 +465,7 @@ menuPrincipal
 #  -z Está vacía
 #  ...
 
-#  -eq  =
+#  -eq  ==
 #  -ne  !=
 #  -lt  <
 #  -gt  >
@@ -457,4 +492,4 @@ menuPrincipal
 #   x   intercambia el pattern space y el hold space entre sí
 #   y   sustituye un determinado carácter por otro
 #   w   escribe líneas en el archivo de texto
-#   !   aplica el comando a las líneas que no coinciden con la entrada.
+#   !   aplica el comando a las líneas que no coinciden con la entrada.
