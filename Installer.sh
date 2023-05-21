@@ -193,6 +193,8 @@ function instalarTomcat() {
             sudo apt install default-jdk wget
         fi
 
+        sudo mkdir -p /opt/tomcat
+
         case $opcion in
             1)  echo "Instalando tomcat9"  
                 sudo apt-get install tomcat9 -y;;
