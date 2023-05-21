@@ -209,7 +209,7 @@ function instalarTomcat() {
                 #Cortamos y comprobamos que version es para meterla en la url y cortarla en caso de que meta cualquier version anterior a 10
                 versionPrevia=${version:0:2}
 
-                if [ ${versionPrevia:1:1} == "."]; then
+                if [ ${versionPrevia:1:1} == "." ]; then
                     versionPrevia=${versionPrevia:0:1}
                 fi
 
@@ -351,10 +351,22 @@ function instalarOPM(){
     echo "Puedes acceder al administrador web con esta url http://$ip/#/login"
 }
 
+function instalarPHPMyAdmin(){
+    instalarApache
+
+    sudo apt install phpmyadmin -y
+    sudo phpenmod mysqli
+    sudo service apache2 restart
+    
+    #Si no se mueve a la carpeta del apache pues no se ve
+    sudo ln -s /usr/share/phpmyadmin /var/www/html/phpmyadmin
+}
+
 function instalarTodo(){
     instalarApache
     instalarPHP
     instalarMariaDB
+    instalarPHPMyAdmin
     instalarTomcat
     instalarOPM
     instalarPIHole
@@ -364,6 +376,7 @@ function instalarPackDesarrolloWeb(){
     instalarApache
     instalarPHP
     instalarMariaDB
+    instalarPHPMyAdmin
     instalarTomcat
 }
 
@@ -373,7 +386,7 @@ function menuDeInstalaciones() {
     echo ""
 
     #El sleep para que el usuario le de tiempo a leerlo
-    #sleep 5 && sudo apt-get update && sudo apt-get upgrade -y
+    sleep 5 && sudo apt-get update && sudo apt-get upgrade -y
 
     while true; do
 
@@ -384,11 +397,12 @@ function menuDeInstalaciones() {
         echo "2. Instalar PHP (se instalara tambien apache)"
         echo "3. Instalar PIhole (Solo debian)"
         echo "4. Instalar MariaDB"
-        echo "5. Instalar Tomcat"
-        echo "6. Instalar OpenMediaVault"
-        echo "7. Instalar pack desarrollo web (PHP,Apache,MariaDB y Tomcat)"
-        echo "8. Instalar todo"
-        echo "9. Menu principal"
+        echo "5. Instalar PHPMyAdmin"
+        echo "6. Instalar Tomcat"
+        echo "7. Instalar OpenMediaVault"
+        echo "8. Instalar pack desarrollo web (PHP,Apache,MariaDB y Tomcat)"
+        echo "9. Instalar todo"
+        echo "10. Menu principal"
 
         echo ""
 
@@ -399,11 +413,12 @@ function menuDeInstalaciones() {
             2) instalarPHP;;
             3) instalarPIHole;;
             4) instalarMariaDB;;
-            5) instalarTomcat;;
-            6) instalarOPM;;
-            7) instalarPackDesarrolloWeb;;
-            8) instalarTodo;;
-            9) break;;
+            5) instalarPHPMyAdmin;;
+            6) instalarTomcat;;
+            7) instalarOPM;;
+            8) instalarPackDesarrolloWeb;;
+            9) instalarTodo;;
+            10) break;;
             *) echo "Opción no válida";;
         esac
     done
