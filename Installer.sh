@@ -457,7 +457,7 @@ function borrarCarpeta() {
 }
 
 function menuPrincipal() {
-    sudo su
+    #sudo su
 
     while $true; do
         echo ""
