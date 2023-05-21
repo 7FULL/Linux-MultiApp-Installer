@@ -17,12 +17,9 @@ function instalarApache() {
     read -p "Quieres borrar el archivo que viene por defecto con apache? y/n" option
     echo ""
 
-    while [ $option != y ] && [ $option != n ]; do
-        if [ $option == y ]; then
+    if [ $option == y ]; then
             sudo rm /var/www/html/index.html
-        fi
-        break
-    done
+    fi
 
     while true; do
         echo ""
@@ -317,6 +314,8 @@ function instalarTomcat() {
         # Reiniciamos el servicio para que se apliquen los cambios
         sudo systemctl restart tomcat
 
+        sudo bash /opt/tomcat/bin/startup.sh
+
         echo ""
         echo "Tomcat $version instalado correctamente."
         echo ""
@@ -443,6 +442,8 @@ function borrarCarpeta() {
 }
 
 function menuPrincipal() {
+    sudo su
+
     while $true; do
         echo ""
 
