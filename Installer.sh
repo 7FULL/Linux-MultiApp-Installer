@@ -19,7 +19,7 @@ function instalarApache() {
 
     while [ $option != y ] && [ $option != n ]; do
         if [ $option == y ]; then
-            rm /var/www/html/index.html
+            sudo rm /var/www/html/index.html
         fi
         break
     done
