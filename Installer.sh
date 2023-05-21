@@ -95,7 +95,7 @@ function instalarPIHole() {
 
     echo ""
 
-    ip=$(hostname -I | awk '{print $2}')
+    ip=$(hostname -I)
 
     echo ""
     echo "PiHole instalado correctamente"
@@ -133,7 +133,7 @@ function instalarMariaDB() {
             echo "Cambiando la bind-address del servidor a la ip de la raspberry"
 
             #Obtenemos la ip y con el awk obtenemos la segunda columna ya que la primera no nos interesa
-            ip=$(hostname -I | awk '{print $2}')
+            ip=$(hostname -I)
 
             #echo ""
             #echo "La ip es: $ip"
@@ -343,7 +343,7 @@ function instalarOPM(){
 
     sudo wget -O - https://github.com/OpenMediaVault-Plugin-Developers/installScript/raw/master/install | sudo bash
 
-    ip=$(hostname -I | awk '{print $2}')
+    ip=$(hostname -I)
 
     echo ""
     echo "OPM instalado correctamente"
