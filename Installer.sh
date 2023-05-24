@@ -394,7 +394,7 @@ function menuDeInstalaciones() {
 
         echo "Seleccione una opción:"
         echo "1. Instalar Apache"
-        echo "2. Instalar PHP (se instalara tambien apache)"
+        echo "2. Instalar PHP"
         echo "3. Instalar PIhole (Solo debian)"
         echo "4. Instalar MariaDB"
         echo "5. Instalar PHPMyAdmin (se instalara tambien apache y PHP)"
