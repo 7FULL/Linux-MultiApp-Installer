@@ -352,6 +352,7 @@ function instalarOPM(){
 }
 
 function instalarPHPMyAdmin(){
+    instalarApache
     instalarPHP
     instalarMariaDB
 
