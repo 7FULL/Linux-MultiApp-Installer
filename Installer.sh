@@ -352,7 +352,7 @@ function instalarOPM(){
 }
 
 function instalarPHPMyAdmin(){
-    instalarPHP
+    #instalarPHP
 
     sudo apt install phpmyadmin -y
     sudo phpenmod mysqli
