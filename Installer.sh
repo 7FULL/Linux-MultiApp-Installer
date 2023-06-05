@@ -375,10 +375,7 @@ function instalarTodo(){
 }
 
 function instalarPackDesarrolloWeb(){
-    instalarApache
-    instalarPHP
-    instalarMariaDB
-    instalarPHPMyAdmin
+    instalarPHPMyAdmin #PHPMyAdmin ya instala apache, PHP y MariaDB
     instalarTomcat
 }
 
