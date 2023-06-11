@@ -365,10 +365,7 @@ function instalarPHPMyAdmin(){
 }
 
 function instalarTodo(){
-    instalarApache
-    instalarPHP
-    instalarMariaDB
-    instalarPHPMyAdmin
+    instalarPHPMyAdmin #PHPMyAdmin ya instala apache, PHP y MariaDB
     instalarTomcat
     instalarOPM
     instalarPIHole
@@ -399,7 +396,7 @@ function menuDeInstalaciones() {
         echo "5. Instalar PHPMyAdmin (se instalara tambien apache y PHP)"
         echo "6. Instalar Tomcat"
         echo "7. Instalar OpenMediaVault (Solo debian)"
-        echo "8. Instalar pack desarrollo web (PHP,Apache,MariaDB y Tomcat)"
+        echo "8. Instalar pack desarrollo web (PHP,Apache,MariaDB,PHPMyAdmin y Tomcat)"
         echo "9. Instalar todo"
         echo "10. Menu principal"
 
