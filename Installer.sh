@@ -393,7 +393,7 @@ function menuDeInstalaciones() {
         echo "2. Instalar PHP"
         echo "3. Instalar PIhole (Solo debian)"
         echo "4. Instalar MariaDB"
-        echo "5. Instalar PHPMyAdmin (se instalara tambien apache y PHP)"
+        echo "5. Instalar PHPMyAdmin (se instalara tambien mariaDB,apache y PHP)"
         echo "6. Instalar Tomcat"
         echo "7. Instalar OpenMediaVault (Solo debian)"
         echo "8. Instalar pack desarrollo web (PHP,Apache,MariaDB,PHPMyAdmin y Tomcat)"
