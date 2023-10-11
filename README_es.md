@@ -1,7 +1,7 @@
 # Debian MultiApp Installer
 
 ## Presentación
-Bienvenido al Debian MultiApp Installer, un script de Linux que te ayuda a instalar y configurar varias aplicaciones en tu sistema Debian. Este script te permite instalar PHP, Apache,
+Bienvenido al Linux MultiApp Installer, un script de Linux que te ayuda a instalar y configurar varias aplicaciones en tu sistema Debian. Este script te permite instalar PHP, Apache,
 MariaDB, Tomcat, OpenMediaVault y Pi-hole y configurarlos a tu placer. Con este instalador, ahorrarás tiempo y te asegurarás de tener todas las aplicaciones necesarias apunto para tu
 proyecto.
 
