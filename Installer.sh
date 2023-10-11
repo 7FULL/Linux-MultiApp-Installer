@@ -126,11 +126,11 @@ function instalarMariaDB() {
     done
 
     while true; do
-        read -p "Quieres que la base de datos emita por la ip de la raspberry? y/n" respuesta
+        read -p "Quieres que la base de datos emita por la ip del sistema? y/n" respuesta
 
         if [ $respuesta == y ]; then
             echo ""
-            echo "Cambiando la bind-address del servidor a la ip de la raspberry"
+            echo "Cambiando la bind-address del servidor a la ip de la sistema"
 
             #Obtenemos la ip y con el awk obtenemos la segunda columna ya que la primera no nos interesa
             ip=$(hostname -I)
