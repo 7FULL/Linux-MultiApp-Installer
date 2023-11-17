@@ -1,6 +1,5 @@
 # Debian MultiApp Installer
 
-## Presentación
 Bienvenido al Linux MultiApp Installer, un script de Linux que te ayuda a instalar y configurar varias aplicaciones en tu sistema Debian. Este script te permite instalar PHP, Apache,
 MariaDB, Tomcat, OpenMediaVault y Pi-hole y configurarlos a tu placer. Con este instalador, ahorrarás tiempo y te asegurarás de tener todas las aplicaciones necesarias apunto para tu
 proyecto.
@@ -30,4 +29,4 @@ sudo bash Installer.sh
 4. Sigue las instrucciones del instalador para instalar y configurar las aplicaciones que desees.
 
 ## Contribución
-Si deseas contribuir a este proyecto, puedes hacer un fork del repositorio, hacer tus cambios y luego crear una solicitud de extracción. Tu contribución es bienvenida.
+Si deseas contribuir a este proyecto, puedes hacer un fork del repositorio, hacer tus cambios y luego subir una solicitud. Tu contribución es bienvenida.
